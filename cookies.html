@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Set and Display a Cookie</h1>
+    <label for="username">Enter your name:</label>
+    <input type="text" id="username" placeholder="Your name">
+    <button onclick="setCookie()">Save Cookie</button>
+
+    <div class="message" id="message"></div>
+
+    <script>
+        // Function to set a cookie
+        function setCookie() {
+            const name = document.getElementById('username').value;
+            if (name) {
+                const d = new Date();
+                d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000)); // Cookie valid for 1 year
+                const expires = "expires=" + d.toUTCString();
+                document.cookie = "username=" + name + ";" + expires + ";path=/";
+                alert("Cookie set! Reload the page to see your name.");
+                document.getElementById('username').value = ''; // Clear the input field
+            } else {
+                alert("Please enter a name before saving.");
+            }
+        }
+
+        // Function to get a cookie value
+        function getCookie(cname) {
+            const name = cname + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookiesArray = decodedCookie.split(';');
+            for (let cookie of cookiesArray) {
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
+        // Display cookie value on page load
+        window.onload = function () {
+            const username = getCookie("username");
+            if (username) {
+                document.getElementById('message').innerText = `Welcome back, ${username}!`;
+            } else {
+                document.getElementById('message').innerText = "No cookie found. Please enter your name.";
+            }
+        };
+    </script>
+</body>
+</html>
